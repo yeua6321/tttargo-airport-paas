@@ -275,7 +275,7 @@ function keepArgoAlive() {
   });
 }
 
-if (process.env.ARGO_AUTH) {
+if (process.env.ARGO_AUTH && process.env.ARGO_KEEP_ALIVE) {
   setInterval(keepArgoAlive, random_interval * 16000);
 }
 
