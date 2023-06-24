@@ -289,14 +289,6 @@ function keepNezhaAlive() {
     if (!err && list.find((app) => app.name === 'nztz')) {
 
     } else {
-      // exec(NEZHA_SCRIPT, (err, _stdout, _stderr) => {
-      //   if (err) {
-      //     console.log(`[${new Date()}] Failed to start Nezha: ${err}! Retrying...`);
-      //     setTimeout(keepNezhaAlive, random_interval * 1000);
-      //   } else {
-      //     console.log(`[${new Date()}] Nezha started!`);
-      //   }
-      // });
       const { stdout, stderr } = await exec(NEZHA_SCRIPT).catch((err: any) => ({ err }));
       if (stdout && !stderr) {
         console.log(`[${new Date()}] Nezha started!`);
