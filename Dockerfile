@@ -34,7 +34,7 @@ RUN rm -rf node_modules && apk add --no-cache nodejs npm iproute2 coreutils curl
 
 # Health check
 HEALTHCHECK --interval=2m --timeout=30s \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/status || exit 1
 
 # Start container
 ENTRYPOINT ["npm", "start"]

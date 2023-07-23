@@ -60,17 +60,21 @@ app.get('/', async (_req: Request, res: Response) => {
   const url = process.env.FAKE_URL || urls[Math.floor(Math.random() * urls.length)];
   try {
     const { data } = await axios.get(url);
+    res.setHeader('X-Argo-Paas', 'true'); // Move this line above res.send()
+    res.setHeader('X-Argo-Host', url); // Move this line above res.send()
     res.send(data.replace(/Deno Land!/g, 'Hello World!'));
   } catch (err) {
     // console.log(err);
+    res.setHeader('X-Argo-Paas', 'true'); // Move this line above res.send()
+    res.setHeader('X-Argo-Host', url); // Move this line above res.send()
     res.send('Hello World!');
   }
 });
 app.get('/favicon.ico', (_req: Request, res: Response) => {
-  res.type('html').send('');
+  res.type('image/x-icon').send('');
 });
 app.get('/favicon.png', (_req: Request, res: Response) => {
-  res.type('html').send('');
+  res.type('image/x-icon').send('');
 });
 app.get(['/index.html', '/index.php', '/index.htm'], (_req: Request, res: Response) => {
   res.type('html').send('');
@@ -324,6 +328,23 @@ const proxyMiddlewareOptions = {
   },
   logLevel: 'silent' as const,
 };
+
+app.use('/proxy/*', createProxyMiddleware({
+  target: '',
+  changeOrigin: true,
+  ws: true,
+  secure: false,
+  router: function (req) {
+    return req.url.split('/proxy/')[1];
+  },
+  logLevel: 'silent',
+  onProxyReq: function (proxyReq, req, res) {
+    proxyReq.setHeader('X-Argo-Paas-req', 'true');
+  },
+  onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['X-Argo-Paas-res'] = 'true';
+  }
+}));
 
 app.use('/', createProxyMiddleware(proxyMiddlewareOptions));
 
