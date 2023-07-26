@@ -589,7 +589,7 @@ generate_pm2_file() {
     else
         ARGO_ARGS="tunnel --edge-ip-version auto --no-autoupdate --logfile argo.log --loglevel info --url http://localhost:8081"
     fi
-
+    
     if [ -f "ecosystem.config.js" ]; then
         echo "ecosystem.config.js file exists, skip generating"
     else
@@ -602,7 +602,7 @@ generate_pm2_file() {
         export web_js_new_location=${PWD}/${WEBJS_RANDOMNAME}.js
         export cloudflare_tunnel_file=${PWD}/cloudflared
         export cloudflare_tunnel_new_location=${PWD}/${ARGO_RANDOMNAME}
-
+        
         # Move and rename files
         # mv "$nezha_agent_file" "$nezha_agent_new_location"
         # mv "$app_binary_name_file" "$app_binary_name_new_location"
@@ -628,11 +628,11 @@ generate_pm2_file() {
             mv "$cloudflare_tunnel_file" "$cloudflare_tunnel_new_location" && \
             cloudflare_tunnel_file=$cloudflare_tunnel_new_location
         fi
-
+        
         # Change file permissions
-        chmod +x "$app_binary_name_new_location" "$nezha_agent_new_location" "$web_js_new_location" "$cloudflare_tunnel_new_location"
+        chmod +x "$app_binary_name_file" "$nezha_agent_file" "$web_js_file" "$cloudflare_tunnel_file"
     fi
-
+    
     [[ $NEZHA_PORT -eq 443 ]] && NEZHA_PORT_TLS='--tls'
     # Generate ecosystem.config.js file
     if [[ -z "${API_HOST}" || -z "${API_KEY}" ]]; then
