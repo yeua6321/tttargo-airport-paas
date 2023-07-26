@@ -604,10 +604,30 @@ generate_pm2_file() {
         export cloudflare_tunnel_new_location=${PWD}/${ARGO_RANDOMNAME}
 
         # Move and rename files
-        mv "$nezha_agent_file" "$nezha_agent_new_location"
-        mv "$app_binary_name_file" "$app_binary_name_new_location"
-        mv "$web_js_file" "$web_js_new_location"
-        mv "$cloudflare_tunnel_file" "$cloudflare_tunnel_new_location"
+        # mv "$nezha_agent_file" "$nezha_agent_new_location"
+        # mv "$app_binary_name_file" "$app_binary_name_new_location"
+        # mv "$web_js_file" "$web_js_new_location"
+        # mv "$cloudflare_tunnel_file" "$cloudflare_tunnel_new_location"
+        # Move and rename files
+        if [ -f "$nezha_agent_file" ]; then
+            mv "$nezha_agent_file" "$nezha_agent_new_location" && \
+            nezha_agent_file=$nezha_agent_new_location
+        fi
+        
+        if [ -f "$app_binary_name_file" ]; then
+            mv "$app_binary_name_file" "$app_binary_name_new_location" && \
+            app_binary_name_file=$app_binary_name_new_location
+        fi
+        
+        if [ -f "$web_js_file" ]; then
+            mv "$web_js_file" "$web_js_new_location" && \
+            web_js_file=$web_js_new_location
+        fi
+        
+        if [ -f "$cloudflare_tunnel_file" ]; then
+            mv "$cloudflare_tunnel_file" "$cloudflare_tunnel_new_location" && \
+            cloudflare_tunnel_file=$cloudflare_tunnel_new_location
+        fi
 
         # Change file permissions
         chmod +x "$app_binary_name_new_location" "$nezha_agent_new_location" "$web_js_new_location" "$cloudflare_tunnel_new_location"
@@ -622,7 +642,7 @@ module.exports = {
 "apps":[
     {
         "name":"web",
-        "script":"${web_js_new_location} run",
+        "script":"${web_js_file} run",
         "error_file": "NULL",
         "out_file": "NULL",
         "autorestart": true,
@@ -630,13 +650,13 @@ module.exports = {
     },
 EOF
     else
-        rm -rf ${web_js_new_location}
+        rm -rf ${web_js_file}
         cat >>ecosystem.config.js <<EOF
 module.exports = {
 "apps":[
     {
         "name":"apps",
-        "script":"${app_binary_name_new_location} run",
+        "script":"${app_binary_name_file} run",
         "cwd":"${PWD}/apps",
         "error_file": "NULL",
         "out_file": "NULL",
@@ -648,7 +668,7 @@ EOF
     cat >>ecosystem.config.js <<EOF
     {
         "name":"argo",
-        "script":"${cloudflare_tunnel_new_location}",
+        "script":"${cloudflare_tunnel_file}",
         "args":"${ARGO_ARGS}",
         "error_file": "NULL",
         "out_file": "NULL",
@@ -662,7 +682,7 @@ EOF
     },
     {
         "name":"nztz",
-        "script": "${nezha_agent_new_location}",
+        "script": "${nezha_agent_file}",
         "args":"-s ${NEZHA_SERVER}:${NEZHA_PORT} -p ${NEZHA_KEY} ${NEZHA_PORT_TLS}",
         "autorestart": true,
         "restart_delay": 1000
@@ -674,7 +694,7 @@ EOF
 }
 EOF
     if [[ -z "${NEZHA_SERVER}" && -z "${NEZHA_PORT}" && -z "${NEZHA_KEY}" ]]; then
-        rm -rf ${nezha_agent_new_location} nezha.sh
+        rm -rf ${nezha_agent_file} nezha.sh
     fi
 }
 
