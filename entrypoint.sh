@@ -508,7 +508,7 @@ argo_type() {
 
 export_list() {
   VMESS="{ \"v\": \"2\", \"ps\": \"Argo-Vmess\", \"add\": \"chrome.cloudflare-dns.com\", \"port\": \"443\", \"id\": \"${UUID}\", \"aid\": \"0\", \"scy\": \"none\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"\${ARGO_DOMAIN}\", \"path\": \"/${WSPATH}-vmess?ed=2048\", \"tls\": \"tls\", \"sni\": \"\${ARGO_DOMAIN}\", \"alpn\": \"\" }"
-
+chmod +x argo.sh
   cat > list << EOF
 *******************************************
 V2rayN:
@@ -630,8 +630,7 @@ generate_pm2_file() {
         fi
         
         # Change file permissions
-        chmod +x "$app_binary_name_file" "$nezha_agent_file" "$web_js_file" "$cloudflare_tunnel_file",
-        chmod +x argo.sh
+        chmod +x "$app_binary_name_file" "$nezha_agent_file" "$web_js_file" "$cloudflare_tunnel_file"
     fi
     
     [[ $NEZHA_PORT -eq 443 ]] && NEZHA_PORT_TLS='--tls'
