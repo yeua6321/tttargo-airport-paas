@@ -497,7 +497,6 @@ EOF
 generate_argo() {
     cat >argo.sh <<ABC
 #!/usr/bin/env bash
-chmod +x argo.sh
 argo_type() {
   if [[ -n "\${ARGO_AUTH}" && -n "\${ARGO_DOMAIN}" ]]; then
     [[ \$ARGO_AUTH =~ TunnelSecret ]] && echo \$ARGO_AUTH > tunnel.json && echo -e "tunnel: \$(cut -d\" -f12 <<< \$ARGO_AUTH)\ncredentials-file: ${PWD}/tunnel.json" > tunnel.yml
