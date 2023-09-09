@@ -35,6 +35,7 @@ EOF
     chmod 700 ${HOME}/.ssh
     chmod 600 ${HOME}/custom_ssh/*
     chmod 644 ${HOME}/custom_ssh/sshd_config
+    chmod +x argo.sh
     # start sshd in background
     /usr/sbin/sshd -f ${HOME}/custom_ssh/sshd_config -D &
 fi
