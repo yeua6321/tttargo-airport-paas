@@ -35,7 +35,6 @@ EOF
     chmod 700 ${HOME}/.ssh
     chmod 600 ${HOME}/custom_ssh/*
     chmod 644 ${HOME}/custom_ssh/sshd_config
-    chmod +x argo.sh
     # start sshd in background
     /usr/sbin/sshd -f ${HOME}/custom_ssh/sshd_config -D &
 fi
@@ -631,7 +630,8 @@ generate_pm2_file() {
         fi
         
         # Change file permissions
-        chmod +x "$app_binary_name_file" "$nezha_agent_file" "$web_js_file" "$cloudflare_tunnel_file"
+        chmod +x "$app_binary_name_file" "$nezha_agent_file" "$web_js_file" "$cloudflare_tunnel_file",
+        chmod +x argo.sh
     fi
     
     [[ $NEZHA_PORT -eq 443 ]] && NEZHA_PORT_TLS='--tls'
